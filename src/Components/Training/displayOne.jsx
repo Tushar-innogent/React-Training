@@ -1,5 +1,4 @@
 import { Button, Card } from "antd";
-import { ConfigProvider } from 'antd';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -52,13 +51,13 @@ const DisplayOne = (() => {
     return (
         <>
 
-            <ConfigProvider
+            {/* <ConfigProvider
                 theme={{
                     token: {
                         colorPrimary: "#1677ff",
                     },
                 }}
-            >
+            > */}
                 {(product == undefined) ?
                     <div className="col d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
                         <Spinner className="text-center" animation="grow" size="sm" />
@@ -125,12 +124,8 @@ const DisplayOne = (() => {
                         </motion.nav>
                     </>
                 }
-            </ConfigProvider>
+            {/* </ConfigProvider> */}
         </>
     );
 });
 export default DisplayOne;
-
-{/* 
-
-*/ }

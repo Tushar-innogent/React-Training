@@ -11,10 +11,11 @@ import { ConfigProvider, theme } from 'antd';
 // import NasaComponent from './Components/Training/nasa';
 // import FormSubmit from './Components/Training/submitData';
 // import Screen from './Components/Training/screenProduct';
-import Display from './Components/Training/display';
+// import Display from './Components/Training/display';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DisplayOne from './Components/Training/displayOne';
 import Employee from './Components/Employee/Employee';
+import EmpDetails from './Components/Employee/EmpDetails';
 
 export default function App() {
   // const [count, setCount] = useState(0);
@@ -34,6 +35,7 @@ export default function App() {
           <Routes>
             <Route path='/' element={<Employee/>}></Route>
             <Route path='/screen/:id' element={<DisplayOne/>}></Route>
+            <Route path='/details/:id' element={<EmpDetails/>}></Route>
           </Routes>
         </BrowserRouter>
 

@@ -1,18 +1,36 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input } from 'antd';
+import React, { useEffect, useRef } from 'react';
+import { Modal, Form, Input, Popover, theme } from 'antd';
 
 const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
     const [form] = Form.useForm();
     console.log(initialData)
-    const setValue = () => {
-        form.setFieldsValue(initialData);
+    // const setValue = () => {
+    //     form.setFieldsValue(initialData);
+    // }
+    // let setValue;
+    // useEffect(()=>{
+    //     setValue = () => {
+    //         form.setFieldsValue(initialData);
+    //     }
+    //     return;
+    // },[setValue, form])
+
+    const setValueRef = useRef();
+
+  useEffect(() => {
+    setValueRef.current = () => {
+      form.setFieldsValue(initialData);
+    };
+  }, [initialData, form]);
+
+  useEffect(() => {
+    if (setValueRef.current) {
+      setValueRef.current();
     }
-    useEffect(()=>{
-        setValue()
-        return;
-    },[setValue])
+  }, [initialData]);
 
     return (
+       
         <Modal
             open={visible}
             title="Provide Employee Details"
@@ -61,6 +79,7 @@ const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
                 </Form.Item>
             </Form>
         </Modal>
+       
     );
 };
 export default EditPopupForm;

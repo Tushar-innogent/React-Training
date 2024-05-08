@@ -15,7 +15,6 @@ import { ConfigProvider, theme } from 'antd';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DisplayOne from './Components/Training/displayOne';
 import Employee from './Components/Employee/Employee';
-import EmpDetails from './Components/Employee/EmpDetails';
 
 export default function App() {
   // const [count, setCount] = useState(0);
@@ -35,7 +34,7 @@ export default function App() {
           <Routes>
             <Route path='/' element={<Employee/>}></Route>
             <Route path='/screen/:id' element={<DisplayOne/>}></Route>
-            <Route path='/details/:id' element={<EmpDetails/>}></Route>
+            {/* <Route path='/details/:id' element={<EmpDetails/>}></Route> */}
           </Routes>
         </BrowserRouter>
 

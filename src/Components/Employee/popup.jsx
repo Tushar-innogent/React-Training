@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, Form, Input, Popover, theme } from 'antd';
+import { Modal, Form, Input } from 'antd';
 
 const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
     const [form] = Form.useForm();
     console.log(initialData)
-    // const setValue = () => {
+    // const setValue = () => { 
+
     //     form.setFieldsValue(initialData);
     // }
     // let setValue;
@@ -17,20 +18,20 @@ const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
 
     const setValueRef = useRef();
 
-  useEffect(() => {
-    setValueRef.current = () => {
-      form.setFieldsValue(initialData);
-    };
-  }, [initialData, form]);
+    useEffect(() => {
+        setValueRef.current = () => {
+            form.setFieldsValue(initialData);
+        };
+    }, [initialData, form]);
 
-  useEffect(() => {
-    if (setValueRef.current) {
-      setValueRef.current();
-    }
-  }, [initialData]);
+    useEffect(() => {
+        if (setValueRef.current) {
+            setValueRef.current();
+        }
+    }, [initialData]);
 
     return (
-       
+
         <Modal
             open={visible}
             title="Provide Employee Details"
@@ -54,7 +55,7 @@ const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
                     label="Name"
                     rules={[{ required: true, message: 'Please input the name of the employee!' }]}
                 >
-                    <Input />
+                    <Input type='text' />
                 </Form.Item>
                 <Form.Item
                     name="department"
@@ -75,11 +76,11 @@ const EditPopupForm = ({ visible, onCancel, onCreate, initialData }) => {
                     label="Salary"
                     rules={[{ required: true, message: 'Please input the salary of the employee!' }]}
                 >
-                    <Input />
+                    <Input type='number' />
                 </Form.Item>
             </Form>
         </Modal>
-       
+
     );
 };
 export default EditPopupForm;

@@ -107,6 +107,7 @@ const Employee = () => {
 
     ];
 
+    
     const deleteEmployee = (id) => {
         axios.delete(`http://localhost:8080/delete/${id}`, { validateStatus: (status) => { return status; } })
             .then(() => {

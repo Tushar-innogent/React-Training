@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Space, Table, notification, Popconfirm } from 'antd';
+import React, { Children, useEffect, useState } from 'react';
+import { Button, Modal, Space, Table, notification, Popconfirm, ConfigProvider, Typography } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import EditPopupForm from './popup';
+import AddEmployee from './addEmployee';
 // import { useDispatch } from 'react-redux'
 // import { assign } from './productSlice'
 
 const Employee = () => {
-
     const [data, setData] = useState(undefined);
     const [visible, setVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
     const [editData, setEditData] = useState({});
     const [loading, setLoading] = useState(false);
     const [api, contextHolder] = notification.useNotification();
-  
+
     const openNotificationWithIcon = (type, message) => {
         api[type]({
             message: `Record ${message} Successfully`,
@@ -26,8 +26,7 @@ const Employee = () => {
             getData();
         }
     }, [data, loading]);
-
-    //need specify columns for antd table
+    // declaring columns for antd table
     const columns = [
         {
             title: 'Id',
@@ -70,13 +69,48 @@ const Employee = () => {
         },
         {
             title: 'Address',
-            dataIndex: 'address',
-            sorter: (a, b) => a.address.localeCompare(b.address),
-            onCell: (record) => {
-                return {
-                    onClick: event => { getDataById(record.id); showModal(); }, // click row
-                };
-            }
+            children: [
+                {
+                    title: 'Street',
+                    dataIndex: 'address',
+                    // sorter: (a, b) => a.address.localeCompare(b.address),
+                    onCell: (record) => {
+                        return {
+                            onClick: event => { getDataById(record.id); showModal(); }, // click row
+                        };
+                    }
+                },
+                {
+                    title: 'City',
+                    dataIndex: ['city', 'cityName'],
+                    sorter: (a, b) => a.address.localeCompare(b.address),
+                    onCell: (record) => {
+                        return {
+                            onClick: event => { getDataById(record.id); showModal(); }, // click row
+                        };
+                    }
+                },
+                {
+                    title: 'State',
+                    dataIndex: ['city', 'state', 'stateName'],
+                    sorter: (a, b) => a.address.localeCompare(b.address),
+                    onCell: (record) => {
+                        return {
+                            onClick: event => { getDataById(record.id); showModal(); }, // click row
+                        };
+                    }
+                },
+                {
+                    title: 'Country',
+                    dataIndex: ['city', 'state', 'country', 'countryName'],
+                    sorter: (a, b) => a.address.localeCompare(b.address),
+                    onCell: (record) => {
+                        return {
+                            onClick: event => { getDataById(record.id); showModal(); }, // click row
+                        };
+                    }
+                },
+            ],
         },
         {
             title: 'Action',
@@ -107,7 +141,6 @@ const Employee = () => {
 
     ];
 
-    
     const deleteEmployee = (id) => {
         axios.delete(`http://localhost:8080/delete/${id}`, { validateStatus: (status) => { return status; } })
             .then(() => {
@@ -117,18 +150,20 @@ const Employee = () => {
             .catch(error => { console.log(error); });
     }
     const editEmployee = values => {
+        console.log(data);
         setEditData(values);
         setEditVisible(true);
     }
     const handleCreate = values => {
-        axios.post(`http://localhost:8080/add`, values).then((response => console.log(response.status, response.error)));
+        console.log(values);
+        axios.post(`http://localhost:8080/employee/add`, values).then((response => console.log(response.status, response.error)));
         console.log('Received values of form: ', values);
         setVisible(false);
         window.location.reload();
         openNotificationWithIcon('success', 'Added');
     };
     const handleEdit = record => {
-        axios.put(`http://localhost:8080/edit/${editData.id}`, record, { validateStatus: (status) => { return true } })
+        axios.put(`http://localhost:8080/employee/edit/${editData.id}`, record, { validateStatus: (status) => { return true } })
             .then(response => {
                 console.log(response.status, response.error);
                 setEditVisible(false);
@@ -179,35 +214,42 @@ const Employee = () => {
             console.error('Error fetching data: ', error);
         }
     }
-
     const buttonStyle = {
         position: "fixed",
         bottom: "40px", /* Adjust this value to move the button up or down */
         left: "60px", /* Adjust this value to move the button left or right */
-        // padding: "10px 20px",
-        // background-color: #007bff;
-        // color: #fff;
         border: "none",
-        // borderRadius: "50%",
         cursor: "pointer",
         zIndex: "1000" /* Make sure the button is above other elements */
     }
-
     return (
         <div>
+            <ConfigProvider
+                    theme={{
+                        components: {
+                            Table: {    
+                                headerBg:"#eb2f96",
+                                colorBgContainer:"#87e8de",
+                                fontSize:18
+                            },
+                        },
+                        token:{
+                            fontFamilyCode:'Georgia'
+                        },
+                        Typography: {
+                            /* here is your component tokens */
+                        },
+                    }}
+                >
             {contextHolder}
-            <h1 className='text-center m-0 p-2 bg-dark-subtle'>EMPLOYEE'S DATA</h1>
-            <div className='m-4 d-flex flex-column justify-content-center align-items-center w-100'>
-                <Table className='m-4 w-75 table-responsive-xxl' columns={columns} dataSource={data}
-                    pagination={pagination} // Disable built-in pagination
-                // onRow={(record, rowIndex) => {
-                //     return {
-                //         onClick: event => { getDataById(record.id); showModal();  }, // click row
-                //     };
-                // }}
-                ></Table>
+            <Typography.Title level={1} className='text-center m-2 p-1'>EMPLOYEE'S DATA</Typography.Title>
+            <div className='m-2 d-flex flex-column justify-content-center align-items-center w-100'>
+                    <Table className='m-2 w-75 table-responsive-xxl' columns={columns} dataSource={data}
+                        pagination={pagination} // Disable built-in pagination
+                   ></Table>                
                 <Button type='primary' className='btn btn-dark ' style={buttonStyle} onClick={() => setVisible(true)}>Add Employee</Button>
             </div>
+            {/* <AddEmployee showPopUp={visible}/> */}
             <EditPopupForm
                 visible={visible}
                 onCancel={() => setVisible(false)}
@@ -229,8 +271,8 @@ const Employee = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                     </div>
                 </div>
-
             </Modal>
+            </ConfigProvider>
         </div>
     )
 }
